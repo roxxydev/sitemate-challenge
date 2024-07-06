@@ -1,0 +1,26 @@
+{
+  "editor.wordWrap": "on",
+  "files.trimTrailingWhitespace": true,
+  "files.trimFinalNewlines": true,
+  "editor.tabSize": 2,
+  "eslint.format.enable": true,
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "eslint.workingDirectories": [
+    "."
+  ],
+  // A bit incorrect as the backend TypeScript version would also use the frontend TypeScript version
+  "typescript.tsdk": "./node_modules/typescript/lib",
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "colorize.languages": [
+    "javascript",
+    "typescript"
+  ]
+}
