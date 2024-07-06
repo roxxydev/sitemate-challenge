@@ -14,6 +14,7 @@ import {
   useColorScheme
 } from 'react-native'
 import { PaperProvider } from 'react-native-paper'
+import { SWRConfig } from 'swr'
 
 import OnboardingStartScreen from './screens/onboarding/start'
 import SearchScreen from './screens/search'
@@ -60,6 +61,31 @@ const App = () => {
         backgroundColor={scheme === 'dark' ? 'black' : 'white'}
         barStyle={scheme === 'dark' ? 'light-content' : 'dark-content'}
       />
+      <SWRConfig
+        value={{
+          provider: () => new Map(),
+          isOnline() {
+            return true
+          },
+          isVisible: () => {
+            return true
+          },
+          initFocus(callback) {
+            // Subscribe to the app state change events
+            const subscription = AppState.addEventListener(
+              'change',
+              (nextAppState) => {
+                if (nextAppState === 'active') {
+                  callback()
+                }
+              }
+            )
+            return () => {
+              subscription.remove()
+            }
+          }
+        }}
+      >
         <NavigationContainer
           theme={
             scheme === 'dark' ? NavigationDarkTheme : NavigationLightTheme
@@ -100,6 +126,7 @@ const App = () => {
             />
           </StackNavigator.Navigator>
         </NavigationContainer>
+      </SWRConfig>
     </PaperProvider>
   )
 }

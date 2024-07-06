@@ -82,7 +82,7 @@ module.exports = {
   },
   "overrides": [
     {
-     "files": ["startselect_types.ts"],
+     "files": ["sitemate_types.ts"],
         "rules": {
           "@typescript-eslint/no-explicit-any": "off"
         }

@@ -1,18 +1,16 @@
-import { Platform, StyleSheet, Text, TextInput } from 'react-native'
+import { StyleSheet } from 'react-native'
 import {
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme
 } from '@react-navigation/native'
 import {
   adaptNavigationTheme,
-  configureFonts,
   MD3DarkTheme,
   MD3LightTheme,
   useTheme
 } from 'react-native-paper'
 import {
-  type MD3Theme,
-  type MD3Typescale
+  type MD3Theme
 } from 'react-native-paper/lib/typescript/types'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
