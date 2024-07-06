@@ -1,3 +1,13 @@
 {
-  "extends": "@react-native/typescript-config/tsconfig.json"
+  "schema": "./node_modules/ts-node/tsconfig.schema.json",
+  "extends": "@react-native/typescript-config/tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "strict": true,
+    "paths": {
+      "~/*": [
+        "./src/*"
+      ]
+    }
+  },
 }
