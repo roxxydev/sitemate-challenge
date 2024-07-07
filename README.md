@@ -1,6 +1,8 @@
 # News App
 The goal of this mobile app is to create an app which has an input and display results coming from api.
 
+![Simulator Screen Recording - iPhone 12 mini - 2024-07-07 at 19 58 46](https://github.com/roxxydev/sitemate-challenge/assets/4046519/dfc6f357-6011-49d1-a802-99c3bd33c544)
+
 ## Requirements
 It is needed to obtain api key from the New API that is used in this project. Note that there is a limit of 100 requests over a 24 hour period (50 requests available every 12 hours) for the free issued News API key. You can replace the key located `/src/utils/config.ts`.
 
