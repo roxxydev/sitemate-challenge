@@ -11,7 +11,7 @@ export type Article = {
   title: string,
   description: string,
   url: string,
-  urlToImage: string,
+  urlToImage?: string,
   content: string,
   publishedAt: string,
   [property: string]: any

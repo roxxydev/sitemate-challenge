@@ -10,7 +10,7 @@ const OnboardingStartScreen = () => {
     // TODO: For now we just skip to search screen
     setTimeout(() => {
       navigation.replace('Search')
-    }, 2000)
+    }, 1000)
   }, [])
 
   return <SplashLoader />

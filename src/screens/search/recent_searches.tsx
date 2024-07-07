@@ -1,6 +1,6 @@
 import React from 'react'
 import { useWindowDimensions, View } from 'react-native'
-import _ from 'lodash'
+import _, { isEmpty } from 'lodash'
 import {
   IconButton,
   Surface,
@@ -10,8 +10,14 @@ import {
 import { useRecentSearchesStore } from '~/api/storage';
 import ImageScaled from '~/components/image_scaled';
 import { Article } from '~/api/sitemate_types';
+import { useAppStyle } from '~/utils/style';
 
-function RecentSearches() {
+export type RecentSearchesProps = {
+  searchText?: string
+}
+
+function RecentSearches({ searchText }: RecentSearchesProps) {
+  const style = useAppStyle()
   const { width } = useWindowDimensions()
   const [recentSearches, setRecentSearches] = useRecentSearchesStore()
 
@@ -19,31 +25,29 @@ function RecentSearches() {
     // TODO: Navigate to news details
   }
 
-  if (_.isEmpty(recentSearches)) {
-    return null
-  }
-
   return (
     <View style={{ gap: 12 }}>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center'
-        }}
-      >
-        <Text variant="headlineSmall">
-          {'Results'}
-        </Text>
-        <IconButton
-          size={15}
-          icon="trash"
-          mode="contained"
-          style={{ marginLeft: 'auto' }}
-          onPress={() => {
-            setRecentSearches([])
+      {!_.isEmpty(recentSearches) && !isEmpty(searchText) && (
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center'
           }}
-        />
-      </View>
+          >
+            <Text variant="headlineSmall">
+              {'Results'}
+            </Text>
+            <IconButton
+              size={15}
+              icon="trash"
+              mode="contained"
+              style={{ marginLeft: 'auto' }}
+              onPress={() => {
+                setRecentSearches([])
+              }}
+            />
+        </View>
+      )}
       <View
         style={{
           flex: 1,
@@ -55,9 +59,7 @@ function RecentSearches() {
       >
         {
           _(recentSearches)
-            .map((searchItem, index) => {
-              // FIXME: Fix type in mmkv
-              const article = searchItem as Article
+            .map((article: Article, index) => {
               return (
                 <TouchableRipple
                   onPress={() => {
@@ -72,31 +74,37 @@ function RecentSearches() {
                   }}
                 >
                   <View style={{ flex: 1, flexDirection: 'row', gap: 12 }}>
-                    <Surface
-                      mode="flat"
-                      style={{
-                        height: '100%',
-                        alignItems: 'center',
-                        borderRadius: 6,
-                        padding: 4
-                      }}
-                    >
-                      <ImageScaled
-                        src={imgUrl}
+                    { article.urlToImage != null && (
+                      <Surface
+                        mode="flat"
                         style={{
-                          width: width / 3.5,
                           height: '100%',
-                          aspectRatio: 'auto'
+                          alignItems: 'center',
+                          borderRadius: 6,
+                          padding: 4
                         }}
-                      />
-                    </Surface>
+                      >
+                        <ImageScaled
+                          src={article.urlToImage}
+                          style={{
+                            width: width / 3.5,
+                            height: '100%',
+                            aspectRatio: 'auto'
+                          }}
+                        />
+                      </Surface>
+                    )}
                     <View
                       style={{
+                        flex: 1,
                         flexDirection: 'column',
                         justifyContent: 'center'
                       }}
                     >
-                      <Text variant="titleSmall">
+                      <Text variant="titleSmall"
+                        style={{ paddingRight: style.safeContainer.marginRight }}
+                        numberOfLines={2}
+                      >
                         {article.title}
                       </Text>
                     </View>

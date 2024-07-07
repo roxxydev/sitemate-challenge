@@ -1,39 +1,39 @@
 import _ from 'lodash'
 import React, { useEffect, useState } from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
-import { ActivityIndicator } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
 
 import { useNewsSearch } from '~/api/sitemate'
-import { useRecentSearchesStore } from '~/api/storage'
 import SearchBar from '~/components/search_bar'
-import { useAppNavigation, useAppRoute } from '~/utils/navigation'
+import { useAppRoute } from '~/utils/navigation'
 import { useAppStyle } from '~/utils/style'
 
 import RecentSearches from './recent_searches'
 import ErrorCard from '~/components/error_card'
+import { Skeleton } from 'react-native-skeletons'
+import { useRecentSearchesStore } from '~/api/storage'
 
 function SearchScreen() {
   const style = useAppStyle()
-  const navigation = useAppNavigation()
+  const theme = useTheme()
   const route = useAppRoute<'Search'>()
   const [searchQuery, setSearchQuery] = useState<string | undefined>(
     route.params?.phrase
   )
-  const { data: searchResult, isLoading: isSearchLoading, error } =
+  const { data, isLoading: isSearchLoading, error } =
     useNewsSearch(searchQuery)
-  const [, setRecentSearches] = useRecentSearchesStore()
+  const [, setSearchResult] = useRecentSearchesStore()
 
   useEffect(() => {
-    if (searchResult != null) {
-      setRecentSearches(searchResult)
+    if (!isSearchLoading && searchQuery != null) {
+      setSearchResult(data)
     }
-  }, [searchResult])
+  }, [isSearchLoading, data])
 
   return (
     <>
       <SearchBar
-        showBack
-        placeholder={'Search for anything'}
+        placeholder={'Search for news'}
         onChangeText={_.debounce((value: string) => {
           value.length >= 2 ? setSearchQuery(value) : setSearchQuery(undefined)
         }, 250)}
@@ -41,15 +41,23 @@ function SearchScreen() {
         autoFocus
       />
       {
-        !_.isEmpty(searchResult) || isSearchLoading ? (
-          <ActivityIndicator />
+        (data != null && data.length) && isSearchLoading ? (
+          _.times(data.length, (index) => (
+            <Skeleton
+              key={index}
+              count={1}
+              width="30%"
+              height={80}
+              color={theme.colors.surfaceVariant}
+            />
+          ))
         ) : error != null ? (<ErrorCard error={ error }/>) : (
         <ScrollView
           contentContainerStyle={[{ gap: 12 }, style.container]}
           showsVerticalScrollIndicator={false}
           keyboardDismissMode="on-drag"
         >
-          <RecentSearches />
+          <RecentSearches searchText={searchQuery}/>
         </ScrollView>
       )}
     </>

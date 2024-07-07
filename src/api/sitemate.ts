@@ -1,11 +1,10 @@
 import _, { sortBy } from 'lodash'
 import qs from 'qs'
-import { Platform } from 'react-native'
-import useSWR, { preload, type SWRConfiguration, useSWRConfig } from 'swr'
-import useSWRMutation from 'swr/mutation'
+import useSWR, { type SWRConfiguration } from 'swr'
 import { config } from '~/utils/config'
 
-import { type Api } from './sitemate_types'
+import { Article, type Api } from './sitemate_types'
+import { useRecentSearchesStore } from './storage'
 
 type ApiEndPoint =
   | 'everything'
@@ -88,7 +87,8 @@ export const useNewsSearch = (phrase?: string) => {
     phrase != null
       ? {
           q: _.trim(phrase),
-          sortBy: 'popularity'
+          sortBy: 'popularity',
+          searchIn: 'title,description'
         }
       : undefined
   )
